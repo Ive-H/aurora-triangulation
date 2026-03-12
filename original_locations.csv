@@ -1,0 +1,8 @@
+N_deg, N_min, N_sec, E_deg, E_min, E_sec, name,   p_center_deg, p_center_min, p_center_sec, l_center_deg, l_center_min, l_center_sec, star_name,   zoom_factor, rotation
+62, 59, 17.6, 23,  2, 25.1, Lapua	, 39, 50 ,58.0, 32, 07, 44.8, 13 Cyg (7_35)		 , 60 , 27
+63,  1, 14.8, 23, 51, 38.1, Alajarvi	, 81, 59, 17.6, 25, 48, 35.6, HIP 83975			 , 160, 30
+61, 25, 25.3, 26, 41, 29.7, Miekankoski , 43, 13, 34.3, 14, 41, 29.7, HIP 99498			 , 8  , 23
+62, 27, 54.2, 25, 21, 43.6, Uurainen	, 67, 50, 37.6, 42, 37, 09.7, HIP 84564			 , 10 , 39
+62, 15, 17.4, 26, 35, 47.0, Hankasalmi	,  0,  0,  0.0, 89,  0,  0.0, straight up		 , 2  , 0
+61, 43,  1.1, 27, 54, 23.5, Juva	,  7, 44, 53.7, 38, 32, 02.8, 32 Cephei			 , 60 , 9
+63, 41, 29.4, 28, 50, 14.9, Nurmes	,  0,  0,  0.0, 89,  0,  0.0, straight up		 , 1  , 0

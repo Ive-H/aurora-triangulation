@@ -1,0 +1,513 @@
+% This program creates a shape out of the intersections of the lines
+% most of the calculations for that are done in the function
+% "intersection_shape"
+% only works with 2 locations at the moment
+
+% for multiple timesteps
+
+%close all
+clear ori
+% clc
+
+loc = readtable("original_locations.csv");
+% [N_deg, N_min, N_sec, E_deg, E_min, E_sec]
+
+% % Lapua-Juva (all-sky cam)
+% ori{1} = readtable("orientations\bulb2-5_33-16.csv");
+% ori{2} = readtable("orientations\bulb2-6_07-16.csv");
+% ori{3} = readtable("orientations\bulb2-6_41-16.csv");
+% ori{4} = readtable("orientations\bulb2a-6_41-16.csv");
+% ori{5} = readtable("orientations\bulb2-7_15-16.csv");
+% ori{6} = readtable("orientations\bulb2a-7_15-16.csv");
+% T = 6;
+% dt = [34 34 0 34 0];
+% clr = [1 0 0; .5 .5 0; 0 1 0; 0 1 0; 0 .5 .5;  0 .5 .5]; 
+% line_names = [""; "5:33"; "6:07"; "6:41"; ""; "7:15"; ""];
+
+% ori{1} = readtable("orientations\bulb2-7_49-16.csv");
+% ori{2} = readtable("orientations\bulb2-8_05-16.csv");
+% ori{3} = readtable("orientations\bulb2-8_23-16.csv");
+% T = 3;
+% dt = [17 17];
+% clr = [1 0 0;   0 1 0;    0 0 1];
+% line_names = [""; "7:49"; "8:06"; "8:23"];
+
+
+% % 8_05 - 10_39 ; Lapua-Juva ; bulb2,stick2
+% ori{1} = readtable("orientations\bulb2-8_05-16.csv");
+% ori{2} = readtable("orientations\stick2-8_05-16.csv");
+% ori{3} = readtable("orientations\bulb2-8_23-16.csv");
+% ori{4} = readtable("orientations\stick2-8_23-16.csv");
+% ori{5} = readtable("orientations\bulb2-8_39-16.csv");
+% ori{6} = readtable("orientations\stick2-8_39-16.csv");
+% ori{7} = readtable("orientations\bulb2-8_56-16.csv");
+% ori{8} = readtable("orientations\stick2-8_56-16.csv");
+% ori{9} = readtable("orientations\bulb2-9_14-16.csv");
+% ori{10} = readtable("orientations\stick2-9_14-16.csv");
+% ori{11} = readtable("orientations\bulb2-9_32-16.csv");
+% ori{12} = readtable("orientations\stick2-9_32-16.csv");
+% ori{13} = readtable("orientations\bulb2-9_48-16.csv");
+% ori{14} = readtable("orientations\stick2-9_48-16.csv");
+% ori{15} = readtable("orientations\bulb2-10_05-16.csv");
+% ori{16} = readtable("orientations\stick2-10_05-16.csv");
+% ori{17} = readtable("orientations\bulb2-10_22-16.csv");
+% ori{18} = readtable("orientations\stick2-10_22-16.csv");
+% ori{19} = readtable("orientations\bulb2-10_39-16.csv");
+% ori{20} = readtable("orientations\stick2-10_39-16.csv");
+% dt = [0 17 0 17 0 17 0 17 0 17 0 17 0 17 0 17 0 17 0];
+% T = 20;
+% clr = [1 0 0;   1 0 0;   0 1 0;    0 1 0;    0 0 1;   0 0 1;...
+%        .8 .2 0; .8 .2 0; 0 .8 .2; 0 .8 .2; .2 0 .8; .2 0 .8;...
+%        .6 .4 0; .6 .4 0; 0 .6 .4; 0 .6 .4; .4 0 .6; .4 0 .6; .6 .6 .6; .6 .6 .6; ];
+% line_names = [""; "8:06"; ""; "8:23"; ""; "8:40"; ""; "8:57"; ""; "9:14"; "";...
+%                   "9:32"; ""; "9:48"; ""; "10:05"; ""; "10:22"; "";"10:39"; "";];
+
+% % % 5_33 - 10_39 ; Lapua-Juva ; bulb2
+% ori{1} = readtable("orientations\bulb2-5_33-16.csv");
+% ori{2} = readtable("orientations\bulb2-5_50-16.csv");
+% ori{3} = readtable("orientations\bulb2-6_07-16.csv");
+% ori{4} = readtable("orientations\bulb2-6_24-16.csv");
+% ori{5} = readtable("orientations\bulb2-6_41-16.csv");
+% ori{6} = readtable("orientations\bulb2-6_58-16.csv");
+% ori{7} = readtable("orientations\bulb2-7_15-16.csv");
+% 
+% ori{8} = readtable("orientations\bulb2-7_32-16.csv");
+% ori{9} = readtable("orientations\bulb2-7_49-16.csv");
+% ori{10} = readtable("orientations\bulb2-8_06-16.csv");
+% ori{11} = readtable("orientations\bulb2-8_23-16.csv");
+% ori{12} = readtable("orientations\bulb2-8_40-16.csv");
+% ori{13} = readtable("orientations\bulb2-8_57-16.csv");
+% 
+% ori{14} = readtable("orientations\bulb2-9_14-16.csv");
+% ori{15} = readtable("orientations\bulb2-9_31-16.csv");
+% ori{16} = readtable("orientations\bulb2-9_48-16.csv");
+% ori{17} = readtable("orientations\bulb2-10_05-16.csv");
+% ori{18} = readtable("orientations\bulb2-10_22-16.csv");
+% ori{19} = readtable("orientations\bulb2-10_39-16.csv");
+% T = 19;
+% dt = ones(T-1,1)*17;
+% clr_line = [0 0 1]; % consistent with plotting8
+
+
+% % % 5_33 - 10_39 ; Lapua-Juva ; bulb3
+% ori{1} = readtable("orientations\bulb3-5_33-16.csv");
+% ori{2} = readtable("orientations\bulb3-5_50-16.csv");
+% ori{3} = readtable("orientations\bulb3-6_07-16.csv");
+% ori{4} = readtable("orientations\bulb3-6_24-16.csv");
+% ori{5} = readtable("orientations\bulb3-6_41-16.csv");
+% ori{6} = readtable("orientations\bulb3-6_58-16.csv");
+% ori{7} = readtable("orientations\bulb3-7_15-16.csv");
+% 
+% ori{8} = readtable("orientations\bulb3-7_32-16.csv");
+% ori{9} = readtable("orientations\bulb3-7_49-16.csv");
+% ori{10} = readtable("orientations\bulb3-8_06-16.csv");
+% ori{11} = readtable("orientations\bulb3-8_23-16.csv");
+% ori{12} = readtable("orientations\bulb3-8_40-16.csv");
+% ori{13} = readtable("orientations\bulb3-8_57-16.csv");
+% 
+% ori{14} = readtable("orientations\bulb3-9_14-16.csv");
+% ori{15} = readtable("orientations\bulb3-9_31-16.csv");
+% ori{16} = readtable("orientations\bulb3-9_48-16.csv");
+% ori{17} = readtable("orientations\bulb3-10_05-16.csv");
+% ori{18} = readtable("orientations\bulb3-10_22-16.csv");
+% ori{19} = readtable("orientations\bulb3-10_39-16.csv");
+% T = 19;
+% dt = ones(T-1,1)*17;
+% clr_line = [0 1 0]; % consistent with plotting8
+
+t_start_utc     = datetime(2025,4,3,21,5,33);
+t_end_utc       = datetime(2025,4,3,21,10,39);
+t_utc           = t_start_utc:seconds(17):t_end_utc;
+t_start_utc_2   = datetime(2025,4,3,21,5, 33+17/2);
+t_end_utc_2     = datetime(2025,4,3,21,10,39-17/2);
+t_utc_2         = t_start_utc_2:seconds(17):t_end_utc_2;
+% 
+% line_names = [""; "5:33"; "5:50"; "6:07"; "6:24"; "6:41"; "6:58"; "7:15"; ...
+%                   "7:32"; "7:49"; "8:06"; "8:23"; "8:40"; "8:57"; ...
+%                   "9:14"; "9:31"; "9:48"; "10:05"; "10:22"; "10:39"];
+
+
+% clr = [1 0 0;   0 1 0;    0 0 1;...
+%        .8 .2 0; 0 .8 .2; .2 0 .8;...
+%        .6 .4 0; 0 .6 .4; .4 0 .6; .6 .6 .6; ...
+%        1 0 0;   0 1 0;    0 0 1;...
+%        .8 .2 0; 0 .8 .2; .2 0 .8;...
+%        .6 .4 0; 0 .6 .4; .4 0 .6;];
+clr = [1 0 0; .8 .2 0; .6 .4 0; .4 .6 0; .2 .8 0; ...
+       0 1 0; 0 .8 .2; 0 .6 .4; 0 .4 .6; 0 .2 .8; ...   
+       0 0 1; .2 0 .8; .4 0 .6; .6 0 .4; .8 0 .2; ...
+       1 0 0; .8 .2 0; .6 .4 0; .4 .6 0;];
+
+
+
+% ori{1} = readtable("orientations\bulb3-9_14-16.csv");
+% ori{2} = readtable("orientations\bulb3-9_31-16.csv");
+% ori{3} = readtable("orientations\bulb3-9_48-16.csv");
+% T = 3;
+% dt = ones(T-1,1)*17;
+% clr = [1 0 0;   0 1 0;    0 0 1];
+% line_names = [""; "9:14"; "9:31"; "9:48"];
+
+% % 5_33 - 10_39 ; Lapua-Juva ; bulb2
+% ori{1} = readtable("orientations\bulb2-5_33-16.csv");
+% ori{2} = readtable("orientations\bulb2-5_50-16.csv");
+% ori{3} = readtable("orientations\bulb2-6_07-16.csv");
+% ori{4} = readtable("orientations\bulb2-6_22-16.csv");
+% ori{5} = readtable("orientations\bulb2-6_41-16.csv");
+% % ori{6} = readtable("orientations\bulb2a-6_41-16.csv");
+% ori{6} = readtable("orientations\bulb2-6_58-16.csv");
+% % ori{8} = readtable("orientations\bulb2a-6_58-16.csv");
+% ori{7} = readtable("orientations\bulb2-7_15-16.csv");
+% ori{8} = readtable("orientations\bulb2-7_32-16.csv");
+% % ori{10} = readtable("orientations\bulb2a-7_15-16.csv");
+% ori{9} = readtable("orientations\bulb2-7_49-16.csv");
+% ori{10} = readtable("orientations\bulb2-8_05-16.csv");
+% ori{11} = readtable("orientations\bulb2-8_23-16.csv");
+% ori{12} = readtable("orientations\bulb2-8_39-16.csv");
+% ori{13} = readtable("orientations\bulb2-8_56-16.csv");
+% ori{14} = readtable("orientations\bulb2-9_14-16.csv");
+% ori{15} = readtable("orientations\bulb2-9_31-16.csv");
+% ori{16} = readtable("orientations\bulb2-9_48-16.csv");
+% ori{17} = readtable("orientations\bulb2-10_05-16.csv");
+% ori{18} = readtable("orientations\bulb2-10_22-16.csv");
+% ori{19} = readtable("orientations\bulb2-10_39-16.csv");
+% T = 19;
+% dt = [17 17 17 17 17 17 17 17 17 17 17 17 17 17 17 17 17 17];
+% clr = [1 0 0;   0 1 0;    0 0 1;...
+%        .8 .2 0; 0 .8 .2; .2 0 .8;...
+%        .6 .4 0; 0 .6 .4; .4 0 .6;...
+%        .4 .6 0; 0 .4 .6; .6 0 .4;...
+%        .2 .8 0; 0 .2 .8; .8 0 .2;...
+%        1 0 0;   0 1 0;   0 0 1; .6 .6 .6];    
+% line_names = [""; "5:33"; "5:50"; "6:07"; "6:24"; "6:41"; "6:58"; "7:15"; "7:32"; "7:49"; "8:06"; "8:23"; "8:40"; "8:57"; "9:14"; "9:31"; "9:48"; "10:05"; "10:22"; "10:39"];
+
+% all 6 locations
+% ori{1} = readtable("orientations/bulb2-7_35.csv");
+% ori{3} = readtable("orientations/bulb2-7_42.csv");
+% ori{4} = readtable("orientations/bulb2-8_10.csv");
+% ori{5} = readtable("orientations/bulb2-8_17.csv");
+% ori{6} = readtable("orientations/bulb2-8_43.csv");
+% ori{7} = readtable("orientations/bulb2-9_07.csv");
+% ori{8} = readtable("orientations/bulb2-9_14.csv");
+% % [loc, p_deg, p_min, p_sec, l_deg, l_min, l_sec]
+% T = 8;
+% % dt = [7, 28, 7, 26, 24, 7, 23]; % time difference between each ori{t}
+% clr = [1 0 0; .5 .5 0; 0 1 0; 0 .5 .5; 0 0 1; .5 0 .5; .5 .5 .5; 0 0 0];    % line color per time
+
+% % Lapua-Juva (normal)
+% ori{1} = readtable("orientations/bulb2-5_24-5_35.csv");
+% ori{2} = readtable("orientations/bulb2-5_56.csv");
+% ori{3} = readtable("orientations/bulb2-6_30.csv");
+% ori{4} = readtable("orientations/bulb2-7_03.csv");
+% ori{5} = readtable("orientations/bulb2-7_35.csv");
+% ori{6} = readtable("orientations/bulb2-8_10.csv");
+% ori{7} = readtable("orientations/bulb2-8_43.csv");
+% ori{8} = readtable("orientations/bulb2-9_14.csv");
+% % [loc, p_deg, p_min, p_sec, l_deg, l_min, l_sec]
+% T = 8;
+% dt = [21, 34, 33, 32, 35, 33, 31]; % time difference between each ori{t}
+% clr = [1 0 0; .5 .5 0; 0 1 0; 0 .5 .5; 0 0 1; .5 0 .5; .5 .5 .5; 0 0 0];                                                % line color per time
+
+% % Lapua-Hankasalmi:
+% ori{1} = readtable("orientations/bulb2-6_18.csv");
+% ori{2} = readtable("orientations/bulb2-7_23.csv");
+% ori{3} = readtable("orientations/bulb2-8_30.csv");
+% ori{4} = readtable("orientations/bulb2-9_36.csv");
+% ori{5} = readtable("orientations/bulb2-10_42.csv");
+% % [loc, p_deg, p_min, p_sec, l_deg, l_min, l_sec]
+% T = 5;
+% dt = [66, 66, 66, 66]; % time difference between each ori{t}
+% clr = [1 0 0; .5 .5 0; 0 1 0; 0 .5 .5; 0 0 1];   
+
+% % Hankasalmi-Juva:
+% ori{1} = readtable("orientations\bulb2-6_18-56.csv");
+% ori{2} = readtable("orientations\bulb2-7_24-56.csv");
+% ori{3} = readtable("orientations\bulb2-8_30-56.csv");
+% ori{4} = readtable("orientations\bulb2-9_31-56.csv");
+% ori{5} = readtable("orientations\bulb2-10_39-56.csv");
+% T = 5;
+% dt = [66, 66, 66, 66]; % time difference between each ori{t}
+% clr = [1 0 0; .5 .5 0; 0 1 0; 0 .5 .5; 0 0 1];   
+
+% % all shapes ; 8:17 ; Lapua-Miekankoski
+% ori{1} = readtable("orientations\bulb2-8_17-13.csv");
+% ori{2} = readtable("orientations\stick2-8_17-13.csv");
+% ori{3} = readtable("orientations\bulb3-8_17-13.csv");
+% ori{4} = readtable("orientations\stick3-8_17-13.csv");
+% %ori{5} = readtable("orientations\bulb4-8_17-13.csv");
+% ori{5} = readtable("orientations\stick4-8_17-13.csv");
+% ori{6} = readtable("orientations\bulb4a-8_17-13.csv");
+% ori{7} = readtable("orientations\bulb4b-8_17-13.csv");
+% ori{8} = readtable("orientations\bulb4c-8_17-13.csv");
+% ori{9} = readtable("orientations\bulb4d-8_17-13.csv");
+% 
+% % ori{7} = readtable("orientations\bulb4-8_17-16.csv");
+% % ori{8} = readtable("orientations\stick4-8_17-16.csv");
+% % ori{9} = readtable("orientations\bulb4-8_17-36.csv");
+% % ori{10} = readtable("orientations\stick4-8_17-36.csv");
+% T = 9;
+% clr = [1 0 0; .5 0 0; 0 1 0; 0 .5 0; 0 0 .5;  .4 0 1;  0 .4 1;  .3 .3 1;  .6 .6 1; ];
+% line_names = [""; "b2"; "s2"; "b3"; "s3"; "s4-13"; "b4a-13"; "b4b-13"; "b4c-13"; "b4d-13"]; %"b4-16"; "s4-16"];% "b4-36"; "s4-36";];
+% dt = [1 1 1 1 1 1 1 1];
+
+
+% all shapes ; 6:22 ; Lapua-Juva-(Hankasalmi)
+ori{1} = readtable("orientations\arc-6_22-15.csv");
+ori{2} = readtable("orientations\arc-6_22-16.csv");
+ori{3} = readtable("orientations\bulb2-6_24-15.csv");
+ori{4} = readtable("orientations\bulb2-6_24-16.csv");
+ori{5} = readtable("orientations\bulb3a-6_24-16.csv");
+ori{6} = readtable("orientations\bulb3b-6_24-16.csv");
+ori{7} = readtable("orientations\bulb4a-6_24-16.csv");
+ori{8} = readtable("orientations\bulb4b-6_24-16.csv");
+ori{9} = readtable("orientations\arc2a-6_24-16.csv");
+ori{10} = readtable("orientations\arc2b-6_24-16.csv");
+T = 10;
+dt = [1 1 1 1 1 1 1 1 1 1]; % time difference between each ori{t}
+clr = [1 0 0; .5 .5 0; 0 1 0; 0 .5 .5; .5 .5 .5; .5 .5 .5; 0 0 1; 0 0 1; .5 0 .5; .5 0 .5];
+line_names = [""; "arc-15"; "arc-16"; "b2-15"; "b2-16"; "b3a-16"; "b3b-16"; "b4a"; "b4b"; "arc2a"; "arc2b"];
+
+
+% % Nurmes
+% ori{1} = readtable("orientations\bulb_a_23_59_30-57.csv");
+% ori{2} = readtable("orientations\bulb_b_23_59_30-57.csv");
+% T = 2;
+% dt = 1;
+% clr = [1 0 0;  0 1 0];
+
+th1 = rad(65,0,0);
+th2 = rad(60,0,0);
+ph1 = rad(21,0,0);
+ph2 = rad(37,0,0);
+
+
+map_image = imread("figures/Maps-65_21-60_37-locs_named.png");
+[N_th, N_ph, temp] = size(map_image);
+
+% Mercator correction
+y1 = iGd(th1);
+y2 = iGd(th2);
+y_grid = linspace(y1, y2, N_th);
+
+theta_grid = Gd(y_grid);
+
+
+[th,ph] = meshgrid(theta_grid, linspace(ph1, ph2, N_ph));
+th = th';
+ph = ph';
+
+figure;
+surf(px(th,ph), py(th,ph), pz(th), map_image, "LineStyle", "none");
+% plots a section of the Earth's surface
+xlabel("x (km)");
+ylabel("y (km)");
+zlabel("z (km)");
+
+xlim([2300 2900]);
+ylim([1100 1800]);
+%zlim([5572.2 5900]);
+view([74, 23]);
+
+
+hold on;
+
+Nl = 7;                 % number of locations
+
+
+center_pt               = zeros(T,3);
+heights                 = zeros(T,1);
+displacements           = zeros(T-1,3);
+distances               = zeros(T-1,1);
+parallel_distances      = zeros(T-1,1);
+
+speeds                  = zeros(T-1,1);
+parallel_speeds         = zeros(T-1,1);
+
+error_position          = zeros(T,1);
+error_distances         = zeros(T-1,1);
+error_speeds            = zeros(T-1,1);
+
+sigma_degrees           = .5; 
+sigma_seconds           = 2;
+
+theta0 = rad(loc.N_deg(1),loc.N_min(1),loc.N_sec(1));
+phi0 =   rad(loc.E_deg(1),loc.E_min(1),loc.E_sec(1));
+Lapua_loc = [px(theta0,phi0) py(theta0,phi0) pz(theta0)];
+
+for t = (1:T)
+    j = 1;
+    N = size(ori{t},1);             % number of orientations
+    dist = 1e6*ones(N,3);
+
+    theta = zeros(N,1);
+    phi   = zeros(N,1);
+    psi   = zeros(N,1);
+    lambda= zeros(N,1);
+
+    for i = (1:N)
+
+        for l = (2:Nl)
+            if i == find(ori{t}.loc == l,1)
+                j = l;
+            end
+        end
+        % assuming that the orientations are grouped by location, j=loc_number
+        
+        theta(i) = rad(loc.N_deg(j),loc.N_min(j),loc.N_sec(j));
+        phi(i)   = rad(loc.E_deg(j),loc.E_min(j),loc.E_sec(j));
+    
+        psi(i)   = rad(ori{t}.p_deg(i),ori{t}.p_min(i),ori{t}.p_sec(i));
+        lambda(i)= rad(ori{t}.l_deg(i),ori{t}.l_min(i),ori{t}.l_sec(i));
+    end
+    N1 = find(ori{t}.loc ~= ori{t}.loc(1),1)-1;
+    N2 = N-N1;
+
+    shape_pts = intersection_shape(theta, phi, psi, lambda, N1, N2);
+
+    K = convhull(shape_pts(:,1), shape_pts(:,2), shape_pts(:,3));
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    trisurf(K,shape_pts(:,1), shape_pts(:,2), shape_pts(:,3),'FaceAlpha',0.1,'FaceColor',clr(t,:),'LineStyle','none');
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    center_pt(t,:) = centroid_polyhedron(K,shape_pts); % mean(shape_pts,1);
+    R_E = 6371;
+
+    heights(t) = ( center_pt(t,1)^2 + center_pt(t,2)^2 + center_pt(t,3)^2 ) ^ (1/2) - R_E;
+    
+    error_position(t) = norm(Lapua_loc - center_pt(t,:)) * sind(sigma_degrees);
+
+    % n_shapes = 2
+    % displacements = zeros(n_shapes,T-1,3);
+    % if t/n_shapes > 1:
+    % i_shape = mod(t,n_shapes) + 1 % arrays start at 1  
+    % displacements(t-1,:)
+
+    if t ~= 1
+        displacements(t-1,:) = center_pt(t,:)-center_pt(t-1,:);
+        distances(t-1) = norm(displacements(t-1,:));
+        speeds(t-1) = distances(t-1)/dt(t-1);
+
+        error_distances(t-1) = norm(Lapua_loc - center_pt(t,:)) * sind(sigma_degrees);
+        
+        % v = x/t -> σ_v = |v|* sqrt[ (σ_x/x)^2 + (σ_t/t)^2 - 2*σ_xt/x*t ]
+        % σ_xt = 0 (covariance between distance & time)
+        
+        error_speeds(t-1) = norm(speeds(t-1)) * ((error_distances(t-1)/distances(t-1))^2 + (sigma_seconds/dt(t-1))^2 )^(1/2);
+    end
+end
+total_displacement = center_pt(T,:) - center_pt(1,:);   % vector
+total_distance = norm(total_displacement);              % scalar
+Dt = sum(dt);                               % total time elapsed
+h_dt = Dt/(2*(T-1));                         % half of averaged dt
+
+for t = 1:T-1
+    parallel_distances(t) = dot(displacements(t,:), total_displacement) / total_distance;
+    parallel_speeds(t)    = parallel_distances(t)/dt(t);
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+scatter3(center_pt(:,1), center_pt(:,2), center_pt(:,3),50,clr,'filled');
+daspect([1 1 1])
+legend(line_names);
+
+hold off;
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% figure;
+% subplot(2,1,1);
+% plot(linspace(0, 	Dt,      T),   heights, ...
+%      linspace(h_dt, Dt-h_dt, T-1), distances, ...
+%      linspace(h_dt, Dt-h_dt, T-1), parallel_distances);
+% legend("heights", "distances", "||-distances")
+% xmax = ceil(Dt/20)*20;
+% xlim([0 xmax]);
+% ylabel("km")
+% 
+% subplot(2,1,2); 
+% plot(linspace(h_dt, Dt-h_dt, T-1), speeds, ...
+%      linspace(h_dt, Dt-h_dt, T-1), parallel_speeds);
+% xlim([0 xmax]);
+% xlabel("time passed (s)")
+% ylabel("km/s")
+% legend("speeds", "||-speeds")
+
+
+x = t_utc; % linspace(0, 	Dt,      T);
+y = heights;
+xconf = [x x(end:-1:1)];         
+yconf = [y+error_position; y(end:-1:1)-error_position(end:-1:1)]';
+
+% clr_line is set at start of document
+
+% % figure;
+% hold on;
+% fill(xconf,yconf, clr_line, 'FaceAlpha', .2, 'EdgeColor', 'none');
+% plot(x, y, 'LineWidth', 1, 'LineStyle','-' , 'Color', clr_line);
+% ymax = ceil(max(yconf)/20)*20;
+% ylim([0, ymax]);
+% % xmax = ceil(Dt/20)*20;
+% % xlim([0 xmax]);
+% xlabel("time (UTC)")
+% ylabel("altitude (km)")
+% grid on;
+% % hold off;
+
+% line_names1 = cat(1,line_names1,"shapes2");
+% legend(line_names1)
+
+
+
+% figure;
+hold on;
+x = t_utc_2; % linspace(h_dt, Dt-h_dt, T-1);
+
+y = parallel_speeds';
+yerr = error_speeds';
+
+xconf = [x x(end:-1:1)];
+yconf = [y+yerr y(end:-1:1)-yerr(end:-1:1)];
+
+fill(xconf, yconf, clr_line, "FaceAlpha", .2, "EdgeColor","none");
+plot(x, y, 'LineWidth', 1, "Color", clr_line);    
+
+xmin = datetime(2025,4,3,21,5,0);
+xmax = datetime(2025,4,3,21,11,0);
+plot([xmin xmax],[0 0],"Color",[0 0 0]); % horzontal black line at y=0
+
+ylim([-1 3]);
+xlabel("time (UTC)")
+ylabel("parallel speed (km/s)")
+grid on;
+hold off;
+
+
+% figure;
+% hold on;
+% 
+% % no Mercator scaling correction:
+% % image([22 37], [64 61], map_image, "AlphaData", .5)
+% 
+% % with Mercator scaling correction:
+% surf(ph .*180./pi, th .*180./pi, zeros(size(th)), map_image, "LineStyle", "none")
+% view(2);
+% 
+% line_names3 = strings(1,1);
+% 
+% 
+% 
+% for t = st:en-1
+%     A = [  phi_pt(s,t)-error_phi(s,t)     phi_pt(s,t)-error_phi(s,t)     phi_pt(s,t+1)+error_phi(s,t+1)      phi_pt(s,t+1)+error_phi(s,t+1) ];
+%     B = [theta_pt(s,t)-error_theta(s,t) theta_pt(s,t)+error_theta(s,t) theta_pt(s,t+1)+error_theta(s,t+1)  theta_pt(s,t+1)-error_theta(s,t+1)];
+%     % C = [phi_pt(s,t)+error_phi(s,t)     phi_pt(s,t)+error_phi(s,t)     phi_pt(s,t+1)-error_phi(s,t+1)     phi_pt(s,t+1)-error_phi(s,t+1)];
+%     % D = [theta_pt(s,t)+error_theta(s,t) theta_pt(s,t)-error_theta(s,t) theta_pt(s,t+1)-error_theta(s,t+1) theta_pt(s,t+1)+error_theta(s,t+1)];
+%     fill(A, B, clr(s,:), "FaceAlpha", .2, "EdgeColor","none");
+%     line_names3 = cat(1,line_names3,"");
+% end
+% plot(phi_pt(s,st:en),theta_pt(s,st:en), "Color", clr(s,:));
+% line_names3 = cat(1,line_names3, int2str(s));
+% 
+% xlabel("Longitude");
+% ylabel("Latitude");
+% xlim([22 37])
+% legend(line_names3, 'FontSize', 12)
+% hold off;
