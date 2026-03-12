@@ -1,0 +1,13 @@
+numbered from East to West instead of West to East.
+And #1 will be the furthest East visible on frame 5_33 / 5_35, 
+instead of a random one in the middle.
+Merged bulbs will have the name/number of both: 
+i.e. bulb1 & bulb2 -> bulb1-2
+Split bulbs will have _a/_b/etc. markings as before.
+
+New bulbs that show up in between: add 1 to all numbers to the West
+
+1 -> 6
+2 -> 4
+3 -> 2
+4 -> 1
