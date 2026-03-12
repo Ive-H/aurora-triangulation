@@ -1,0 +1,7 @@
+loc, p_deg, p_min, p_sec, l_deg, l_min, l_sec, star_name
+1, 0, 0, 0, 0, 0, 0, North Pole
+1, 0, 0, 0, 90, 0, 0, up
+2, 0, 0, 0, 0, 0, 0, North Pole
+2, 0, 0, 0, 90, 0, 0, up
+3, 0, 0, 0, 0, 0, 0, North Pole
+3, 0, 0, 0, 90, 0, 0, up
