@@ -2,7 +2,9 @@
 
 Accompanying code created for my internship project called "Triangulation of Auroral Beads Using Citizen Scientist Photos".
 The timelapses used in this project:
+
 https://www.taivaanvahti.fi/observations/show/133558 (Lapua, Finland)
+
 https://www.taivaanvahti.fi/observations/show/134547 (Juva, Finland)
 
 If you only want to reproduce the plots of altitude, parallel speed, wavelength, (volume), then "plot_from_csvs.m" can be used for that.
@@ -23,7 +25,9 @@ The "original_locations.csv" file is a list of locations and their Latitude & Lo
 and for "viewpoint.m" specifically, I added a viewing direction (p_center_, l_center_, star_name), a zoom_factor and a rotation.
 
 Columns of original_locations.csv":
+
 N_deg, N_min, N_sec, E_deg, E_min, E_sec, name
+
 degrees, arcminutes, arcseconds (North/East), location name
 
 
@@ -32,7 +36,9 @@ Each of the contour method files ("bulb_") contain the angles for the contour of
 Each of the center pt method files "orientations/bulb_centers/..." contain one angle for each bead/stick, for a single timestep.
 
 Columns of the "orientations/... .csv" files:
+
 loc, p_deg, p_min, p_sec, l_deg, l_min, l_sec, star_name
+
 location number (index for "original_locations.csv"),
  degrees, arcminutes, arcseconds (p = Azimuth / l = Altitude), name of the star
 
@@ -44,13 +50,18 @@ The code doesn't use this filename data, it's simply an organising method.
 The time is hardcoded in the code.
 
 The numbering convention in orientations/bulb_centers/... is consistent with the report.
+
 The numbering convention in orientations/... is not consistent with the report, as they were made earlier on, and deemed a waste of time to change after.
 
 orientations/...  ->	orientations/bulb_centers/...
 _____________________________________________________________
+
 bulb4		  ->	1
+
 bulb3		  ->	2
+
 bulb2		  ->	4
+
 bulb1		  ->	6
 
 
