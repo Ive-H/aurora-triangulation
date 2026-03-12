@@ -24,7 +24,7 @@ In the report itself, "plotting3_connecting_lines.m" and "plotting5_convhull.m" 
 The "original_locations.csv" file is a list of locations and their Latitude & Longitude,
 and for "viewpoint.m" specifically, I added a viewing direction (p_center_, l_center_, star_name), a zoom_factor and a rotation.
 
-Columns of original_locations.csv":
+Columns of "original_locations.csv":
 
 N_deg, N_min, N_sec, E_deg, E_min, E_sec, name
 
